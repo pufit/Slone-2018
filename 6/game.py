@@ -20,7 +20,7 @@ TICK = 0.10
 FIELD_WIDTH = 20
 FIELD_HEIGHT = 20
 LIFE_HEIGHT = 80
-SYNC_TIME = 1
+SYNC_TIME = 1.5
 
 
 def coord_to_coord(x, y, k):
@@ -228,11 +228,11 @@ def ws_client(field, me):
                 player.y = data['players'][i][1]
                 player.direction = data['players'][i][2]
                 player.life.life = data['players'][i][3]
-            for i in range(len(field.bullets)):
-                bullet = field.bullets[i]
-                bullet.x = data['bullets'][i][0]
-                bullet.y = data['bullets'][i][1]
-                bullet.direction = data['bullets'][i][2]
+            bullets = []
+            for i in range(data['bullets_count']):
+                bullet = Bullet(data['bullets'][i][0], data['bullets'][i][1], data['bullets'][i][2])
+                bullets.append(bullet)
+            field.bullets = bullets
 
 
 def main():
@@ -292,6 +292,7 @@ def main():
             resp = {
                 'type': 'get_sync',
                 'data': {
+                    'bullets_count': len(field.bullets),
                     'bullets': [[bullet.x, bullet.y, bullet.direction] for bullet in field.bullets],
                     'players': [[player.x, player.y, player.direction,
                                  player.life.life] for player in field.players.values()],
