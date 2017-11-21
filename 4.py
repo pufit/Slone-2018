@@ -25,6 +25,7 @@ while True:
         break
     if pos[1] <= 0:
         print('^')
+        break
     
     if step == 0:
         if field[pos[1] - 1][pos[0]] == '#':
